@@ -1,1 +1,5 @@
-single_cell_vae/logs/
+single_cell_vae/logs/*
+single_cell_vae/wandb/*
+!single_cell_vae/logs/.gitkeep
+!single_cell_vae/wandb/.gitkeep
+
