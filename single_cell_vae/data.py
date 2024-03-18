@@ -21,10 +21,12 @@ class SingleCellDataset(Dataset):
             data_path (Text): Path to data dir
             transform (Any, optional): Optional data transofrmation. Defaults to None.
         """
-        sample_dirs = os.listdir(data_path)
+        paths = os.listdir(data_path)
         self.img_files = []
-        for d in sample_dirs:
-            self.img_files += glob(os.path.join(data_path, d, "*.tiff"))
+        for p in paths:
+            ims = os.listdir(os.path.join(data_path,p))
+            for i in ims:
+                self.img_files.append(os.path.join(data_path,p,i))
         self.transform = transform
         self.eval = eval
 
@@ -43,12 +45,14 @@ class SingleCellDataset(Dataset):
         """
         filepath = self.img_files[idx]
         img = imread(filepath)
-
+        img = img[16:80,16:80,0] #make smaller crop, take only PanCK (0)
         if img.dtype == "uint16":
-            img = img_as_ubyte(img)
+            img = img.astype(np.float32)
+        if len(img.shape) == 2:
+            img = np.expand_dims(img,2)
         tensor = torch.from_numpy(img)
         tensor = tensor.permute(2, 0, 1).float()
-        tensor /= 255
+        #tensor /= 65535
 
         if self.transform:
             tensor = self.transform(tensor)

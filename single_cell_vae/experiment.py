@@ -24,7 +24,7 @@ class SingleCellVAE(pl.LightningModule):
         self.n_samples = n_samples
         self.sample_step = sample_step
         self.step = 0
-        self.colors = ["Blues", "Greens", "Reds", "Purples", "Oranges"]
+        self.colors = ["Reds", "Greens", "Blues", "Purples", "Oranges"]
 
     def forward(self, input: torch.Tensor, **kwargs) -> torch.Tensor:
         return self.model(input, **kwargs)
